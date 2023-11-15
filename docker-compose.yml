@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+
+  server:
+    container_name: dbass-server
+    build: ./server
+    volumes:
+      - ./server:/service/app
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    depends_on:
+      - postgres
+    networks:
+      - dbass-network
+
+  postgres:
+    container_name: dbass-postgres
+    image: postgres:14.5
+    environment:
+      POSTGRES_DB: dbass
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - platform_db:/var/lib/postgresql
+    networks:
+      - dbass-network
+
+volumes:
+  platform_db:
+
+networks:
+  dbass-network:
